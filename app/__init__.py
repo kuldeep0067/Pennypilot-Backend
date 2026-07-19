@@ -9,6 +9,9 @@ from app.extensions.migrate import migrate
 from app.routes.health import health_bp
 from app.routes.auth_routes import auth_bp
 from app.routes.user_routes import user_bp
+from app.routes.expense_routes import (
+    expense_bp
+)
 
 def create_app():
 
@@ -34,6 +37,10 @@ def create_app():
     
     app.register_blueprint(
         user_bp
+    )
+    
+    app.register_blueprint(
+        expense_bp
     )
 
     with app.app_context():
