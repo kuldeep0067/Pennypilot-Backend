@@ -6,6 +6,14 @@ from app.models.user import User
 
 from app.utils.validators import is_valid_email
 
+from werkzeug.security import (
+        check_password_hash
+    )
+
+from flask_jwt_extended import (
+      create_access_token
+    )
+
 
 def register_user(data):
 
@@ -47,3 +55,42 @@ def register_user(data):
     db.session.commit()
 
     return True, "User registered successfully"
+
+def login_user(data):
+
+    email = data.get("email")
+
+    password = data.get("password")
+
+    if not email:
+
+        return False, "Email is required", None
+
+    if not password:
+
+        return False, "Password is required", None
+
+    user = User.query.filter_by(
+        email=email
+    ).first()
+
+    if not user:
+
+        return False, "Invalid credentials", None
+
+    if not check_password_hash(
+        user.password,
+        password
+    ):
+
+        return False, "Invalid credentials", None
+
+    access_token = create_access_token(
+        identity=str(user.id)
+    )
+
+    return (
+        True,
+        "Login successful",
+        access_token
+    )

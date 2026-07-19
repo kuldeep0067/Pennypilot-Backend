@@ -25,3 +25,5 @@ class Config:
     )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    JWT_ACCESS_TOKEN_EXPIRES = 3600
