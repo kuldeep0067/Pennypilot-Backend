@@ -65,3 +65,37 @@ def get_all_expenses(user_id):
     ]
 
     return expense_list
+
+def get_expense_by_id(
+    expense_id,
+    user_id
+):
+
+    expense = Expense.query.get(
+        expense_id
+    )
+
+    if not expense:
+
+        return (
+            False,
+            "Expense not found",
+            None,
+            404
+        )
+
+    if expense.user_id != int(user_id):
+
+        return (
+            False,
+            "Access denied",
+            None,
+            403
+        )
+
+    return (
+        True,
+        "Expense fetched successfully",
+        expense.to_dict(),
+        200
+    )

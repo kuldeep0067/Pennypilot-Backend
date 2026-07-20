@@ -9,7 +9,8 @@ from flask_jwt_extended import (
 
 from app.services.expense_service import (
     create_expense,
-    get_all_expenses
+    get_all_expenses,
+    get_expense_by_id
 )
 
 from app.utils.response import (
@@ -67,4 +68,33 @@ def get_expenses():
     return success_response(
         "Expenses fetched successfully",
         expenses
+    )
+    
+@expense_bp.route(
+    "/<int:expense_id>",
+    methods=["GET"]
+)
+@jwt_required()
+def get_expense(expense_id):
+
+    user_id = get_jwt_identity()
+
+    success, message, data, status = (
+        get_expense_by_id(
+            expense_id,
+            user_id
+        )
+    )
+
+    if not success:
+
+        return error_response(
+            message,
+            status
+        )
+
+    return success_response(
+        message,
+        data,
+        status
     )
