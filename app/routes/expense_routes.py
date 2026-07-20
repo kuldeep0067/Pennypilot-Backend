@@ -18,6 +18,13 @@ from app.utils.response import (
     error_response
 )
 
+from app.services.expense_service import (
+    create_expense,
+    get_all_expenses,
+    get_expense_by_id,
+    update_expense
+)
+
 expense_bp = Blueprint(
     "expense",
     __name__,
@@ -97,4 +104,35 @@ def get_expense(expense_id):
         message,
         data,
         status
+    )
+    
+@expense_bp.route(
+    "/<int:expense_id>",
+    methods=["PUT"]
+)
+@jwt_required()
+def edit_expense(expense_id):
+
+    user_id = get_jwt_identity()
+
+    data = request.get_json()
+
+    success, message, status = (
+        update_expense(
+            expense_id,
+            user_id,
+            data
+        )
+    )
+
+    if not success:
+
+        return error_response(
+            message,
+            status
+        )
+
+    return success_response(
+        message,
+        status_code=status
     )

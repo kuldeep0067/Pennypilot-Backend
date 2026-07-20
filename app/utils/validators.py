@@ -55,3 +55,61 @@ def validate_expense(data):
         return False, "Invalid date"
 
     return True, None
+
+
+def validate_expense_update(data):
+
+    if "title" in data:
+
+        if not data["title"]:
+
+            return False, "Title cannot be empty"
+
+    if "amount" in data:
+
+        try:
+
+            amount = float(
+                data["amount"]
+            )
+
+            if amount < 0:
+
+                return (
+                    False,
+                    "Amount cannot be negative"
+                )
+
+        except Exception:
+
+            return (
+                False,
+                "Invalid amount"
+            )
+
+    if "category" in data:
+
+        if data["category"] not in CATEGORIES:
+
+            return (
+                False,
+                "Invalid category"
+            )
+
+    if "date" in data:
+
+        try:
+
+            datetime.strptime(
+                data["date"],
+                "%Y-%m-%d"
+            )
+
+        except Exception:
+
+            return (
+                False,
+                "Invalid date"
+            )
+
+    return True, None
