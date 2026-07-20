@@ -50,3 +50,16 @@ class Expense(db.Model):
 
     def __repr__(self):
         return f"<Expense {self.title}>"
+    
+    def to_dict(self):
+
+        return {
+            "id": self.id,
+            "title": self.title,
+            "amount": self.amount,
+            "category": self.category,
+            "date": self.date.isoformat(),
+            "description": self.description,
+            "user_id": self.user_id,
+            "created_at": self.created_at.isoformat()
+        }

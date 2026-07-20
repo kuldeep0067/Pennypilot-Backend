@@ -50,3 +50,18 @@ def create_expense(
         True,
         "Expense created successfully"
     )
+    
+def get_all_expenses(user_id):
+
+    expenses = Expense.query.filter_by(
+        user_id=user_id
+    ).order_by(
+        Expense.created_at.desc()
+    ).all()
+
+    expense_list = [
+        expense.to_dict()
+        for expense in expenses
+    ]
+
+    return expense_list
